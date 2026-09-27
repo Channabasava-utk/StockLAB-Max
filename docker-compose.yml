@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: stocklab
+      POSTGRES_USER: stocklab
+      POSTGRES_PASSWORD: change-me
+    volumes:
+      - stocklab_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stocklab -d stocklab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  stocklab:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      STOCKLAB_DATABASE_URL: postgresql://stocklab:change-me@postgres:5432/stocklab
+      STOCKLAB_CORS_ORIGINS: http://localhost:8000
+      STOCKLAB_WORKER_MODE: thread
+    volumes:
+      - ./data:/app/data
+      - ./runtime:/app/runtime
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  stocklab_postgres:

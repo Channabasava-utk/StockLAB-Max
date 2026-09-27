@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+experiments.db
+.stocklab_cache/
+runtime/
+.git/
+.env
