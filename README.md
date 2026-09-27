@@ -12,7 +12,7 @@ StockLab MAX is a quantitative research workstation designed to bring market dat
 
 ### Research Orchestrator
 
-![Research Orchestrator](screenshots/Research-Orchestrator.png.png)
+![Research Orchestrator](screenshots/Research-Orchestra.png.png)
 
 ### Research Intelligence
 
