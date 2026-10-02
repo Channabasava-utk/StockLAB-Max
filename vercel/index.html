@@ -90,7 +90,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function fmt(v,d=2){return v==null?'—':Number(v).toFixed(d)}
 function pct(v){return v==null?'—':(Number(v)*100).toFixed(1)+'%'}
 function card(label,value,sub=''){return `<div class="card"><div class="muted">${esc(label)}</div><div class="big">${esc(value)}</div><span class="muted">${esc(sub)}</span></div>`}
-const API_BASE=(location.port==='8000'||location.hostname==='localhost'&&location.port==='8000'||location.hostname==='127.0.0.1'&&location.port==='8000')?'':'http://127.0.0.1:8000';
+const API_BASE='';
 function apiHeaders(json=false){let h={};let k=localStorage.getItem('stocklab_api_key')||'';if(k)h['x-api-key']=k;if(json)h['Content-Type']='application/json';return h}
 async function get(url){let r=await fetch(API_BASE+url,{headers:apiHeaders()});let text=await r.text();let j;try{j=JSON.parse(text)}catch(_){throw Error('Backend returned non-JSON response. Check that FastAPI is running on http://127.0.0.1:8000.')}if(!r.ok)throw Error(j.detail||'Request failed');return j}
 async function post(url,body){let r=await fetch(API_BASE+url,{method:'POST',headers:apiHeaders(true),body:JSON.stringify(body)});let text=await r.text();let j;try{j=JSON.parse(text)}catch(_){throw Error('Backend returned non-JSON response. Check that FastAPI is running on http://127.0.0.1:8000.')}if(!r.ok)throw Error(j.detail||'Request failed');return j}
