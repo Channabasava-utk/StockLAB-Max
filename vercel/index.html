@@ -49,7 +49,7 @@ main{margin-left:248px;min-height:100vh;padding:28px 4% 70px}.top{display:flex;j
     <button data-p="report">▤ Research Dossier</button>
     <button data-p="intelligence">✺ Research Intelligence</button>
     <button data-p="settings">⚙ System Settings</button><button data-p="ops">◌ Platform Ops</button>
-    <button data-p="academy">◎ Quant Academy</button>
+    <button data-p="academy">◎ Quant Academy</button><button data-p="sell">◆ Sell / License</button>
   </div>
   <div class="sidebox"><span class="statusdot">● ENGINE READY</span><br><br>Local research mode.<br>No broker connection.<br>No automatic live execution.<br><br>Every major research run can be persisted locally in SQLite.</div>
 </aside>
@@ -125,6 +125,29 @@ main{margin-left:248px;min-height:100vh;padding:28px 4% 70px}.top{display:flex;j
 <section id="ops" class="page"><h2>Platform Ops</h2><div class="hero"><h2 style="font-size:31px">Production control plane.</h2><p>Optional accounts, asynchronous research jobs, structured agent tools, storage backend status and broker boundaries live here. Live execution remains disabled by design.</p></div><div class="grid2"><div class="card"><h3>Research account</h3><label class="muted small">Email</label><input id="opsemail" placeholder="researcher@example.com"><label class="muted small">Password</label><input id="opspass" type="password" placeholder="8+ characters"><div class="actions"><button class="action primary" onclick="authRegister()">Register</button><button class="action" onclick="authLogin()">Login</button><button class="action" onclick="authLogout()">Logout</button></div><div id="authops" class="muted small"></div></div><div class="card"><h3>Infrastructure</h3><div id="opsstatus" class="muted">Loading…</div><div class="actions"><button class="action" onclick="loadOps()">Refresh</button></div></div></div><div class="card" style="margin-top:12px"><h3>Async research jobs</h3><div class="controls"><div><label>Symbol</label><input id="jobsy" value="RELIANCE.NS"></div><div><label>Period</label><select id="jobpe"><option>2y</option><option selected>5y</option><option>10y</option></select></div></div><label class="muted small">Hypothesis</label><textarea id="jobhyp">Investigate whether the baseline trend strategy behaves differently across market regimes.</textarea><div class="actions"><button class="action primary" onclick="startJob()">Start Background Research</button><button class="action" onclick="loadJobs()">Refresh Jobs</button></div><div id="jobsout"></div></div><div class="card" style="margin-top:12px"><h3>Structured AI tools</h3><p class="muted">These tools give an LLM auditable functions instead of letting it invent research metrics.</p><div id="toolsout" class="code">Loading tool contract…</div></div></section>
 
 <div class="footer">StockPulse v6.2 • Production architecture • Historical analysis is not a guarantee of future performance.</div>
+<section id="sell" class="page">
+<h2>StockPulse Commercial</h2>
+<div class="hero">
+<div class="eyebrow">READY-TO-DEPLOY RESEARCH SOFTWARE</div>
+<h2>Own a systematic research workflow.</h2>
+<p>StockPulse brings screening, strategy research, validation, risk diagnostics, portfolio analytics and paper trading into one deployable platform. Use the existing workflow, request a branded customization, or extend the platform for your own research process.</p>
+<div class="actions">
+<button class="action primary" onclick="go('dashboard')">Open Platform</button>
+<button class="action" onclick="go('report')">See Research Dossier</button>
+</div>
+</div>
+<div class="grid3">
+<div class="card"><div class="muted">Core stack</div><div class="big">Python + FastAPI</div><p class="muted">Web research application with a lightweight frontend.</p></div>
+<div class="card"><div class="muted">Data workflow</div><div class="big">Market → Test → Validate</div><p class="muted">Designed around reproducible research rather than execution.</p></div>
+<div class="card"><div class="muted">Deployment</div><div class="big">Vercel Ready</div><p class="muted">Source-controlled deployment configuration included.</p></div>
+</div>
+<div class="pricing">
+<div class="card priceCard"><div class="eyebrow">Starter</div><div class="price">₹7,500+</div><ul><li>Existing platform</li><li>Deployment setup</li><li>Basic branding</li><li>Documentation</li></ul></div>
+<div class="card priceCard featured"><span class="pill badge">RECOMMENDED PACKAGE</span><div class="eyebrow">Pro</div><div class="price">₹15,000+</div><ul><li>Starter package</li><li>Custom UI and branding</li><li>Research universe configuration</li><li>Workflow customization</li><li>Deployment handover</li></ul></div>
+<div class="card priceCard"><div class="eyebrow">Custom</div><div class="price">₹30,000+</div><ul><li>Custom modules</li><li>Database configuration</li><li>Integrations</li><li>Specialized analytics</li><li>Post-delivery development</li></ul></div>
+</div>
+<div class="notice good"><b>Commercial note:</b> Pricing is an indicative starting point for customization and deployment. Third-party market-data/API terms, hosting costs, and any client-specific services are separate where applicable.</div>
+</section>
 </main>
 <script>
 const $=id=>document.getElementById(id); let charts={};
