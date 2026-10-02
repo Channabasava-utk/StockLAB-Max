@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -18,6 +19,12 @@ from agent_tools import TOOLS as AGENT_TOOLS
 
 APP_VERSION = "7.0.0-FINAL"
 app = FastAPI(title="StockLab MAX Quant Research Platform", version=APP_VERSION)
+
+# Vercel/local browser UI: serve the bundled single-page frontend from the same FastAPI app.
+# This keeps the existing index.html frontend and /api/* endpoints on one origin.
+@app.get("/", include_in_schema=False)
+def frontend():
+    return FileResponse(Path(__file__).with_name("index.html"))
 ALLOWED_ORIGINS = [x.strip() for x in os.getenv("STOCKLAB_CORS_ORIGINS", "*").split(",") if x.strip()]
 app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=["*"], allow_headers=["*"])
 
@@ -70,7 +77,10 @@ async def rate_limit(request: Request, call_next):
         bucket.append(now)
     return await call_next(request)
 
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "experiments.db")
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+# Vercel function storage is ephemeral; PostgreSQL should be used for durable persistence.
+# /tmp is writable for transient SQLite fallback and is cleared between instances.
+DB_PATH = os.path.join("/tmp" if os.getenv("VERCEL") else APP_DIR, "experiments.db")
 DB_INFO = db_info(DB_PATH)
 db_migrate(DB_PATH)
 
@@ -132,7 +142,10 @@ def make_data_provider():
     return LocalCSVProvider() if os.getenv("STOCKLAB_DATA_PROVIDER","yfinance").lower()=="csv" else YahooMarketDataProvider()
 
 DATA_PROVIDER = make_data_provider()
-CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".stocklab_cache")
+CACHE_ROOT = os.getenv("STOCKLAB_CACHE_DIR")
+if not CACHE_ROOT:
+    CACHE_ROOT = "/tmp/stocklab_cache" if os.getenv("VERCEL") else os.path.join(APP_DIR, ".stocklab_cache")
+CACHE_DIR = CACHE_ROOT
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 def dataset_fingerprint(x: pd.DataFrame) -> str:
@@ -701,7 +714,10 @@ def report(symbol,period="5y"):
 # These extensions are intentionally dependency-light and preserve the local-first workflow.
 APP_VERSION = "7.0.0-FINAL"
 app.version = APP_VERSION
-CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".stocklab_cache")
+CACHE_ROOT = os.getenv("STOCKLAB_CACHE_DIR")
+if not CACHE_ROOT:
+    CACHE_ROOT = "/tmp/stocklab_cache" if os.getenv("VERCEL") else os.path.join(APP_DIR, ".stocklab_cache")
+CACHE_DIR = CACHE_ROOT
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 # ---------- Research provenance / experiment schema ----------

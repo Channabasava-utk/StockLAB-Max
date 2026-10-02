@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+experiments.db
+*.db
+.stocklab_cache/
+runtime/*.json
+runtime/*.db
+.DS_Store
